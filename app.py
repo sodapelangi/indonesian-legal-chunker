@@ -138,40 +138,10 @@ async def process_document_async(job_id: str, text: str, options: ChunkingOption
             overlap_size=options.overlap_size
         )
         
-        await update_progress(job_id, "parsing", 15.0, "Extracting document metadata")
         
-        # Extract metadata
-        metadata = chunker.extract_metadata(text)
+        await update_progress(job_id, "parsing", 25.0, ""Processing document with chunker")
         
-        await update_progress(job_id, "parsing", 25.0, "Analyzing document structure")
-        
-        # Split into sections
-        sections = chunker.split_into_sections(text)
-        sections = chunker.establish_hierarchy(sections)
-        
-        await update_progress(job_id, "chunking", 35.0, "Creating metadata chunk")
-        
-        # Create chunks
-        all_chunks = [chunker.create_metadata_chunk()]
-        total_sections = len(sections)
-        
-        await update_progress(job_id, "chunking", 40.0, f"Processing {total_sections} sections", 0, total_sections)
-        
-        # Process each section with progress updates
-        for i, section in enumerate(sections):
-            if section['content']:
-                section_chunks = chunker.chunk_long_content(section['content'], section)
-                all_chunks.extend(section_chunks)
-                
-                progress = 40.0 + (50.0 * (i + 1) / total_sections)
-                await update_progress(
-                    job_id, "chunking", progress, 
-                    f"Processed section: {section.get('title', 'Unknown')}", 
-                    i + 1, total_sections
-                )
-                
-                # Small delay to allow progress updates
-                await asyncio.sleep(0.1)
+        all_chunks = chunker.chunk_document(text)
         
         await update_progress(job_id, "finalizing", 95.0, "Preparing response")
         
@@ -205,6 +175,10 @@ async def process_document_async(job_id: str, text: str, options: ChunkingOption
             "type_counts": type_counts,
             "total_characters": total_chars
         }
+        
+        # Get metadata from the chunker's document_metadata attribute
+        # This is set automatically by chunk_document method
+        metadata = chunker.document_metadata
         
         processing_time = time.time() - start_time
         

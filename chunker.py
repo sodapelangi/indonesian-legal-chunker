@@ -500,3 +500,8 @@ class AdaptiveIndonesianLegalDocumentChunker:
         data = self.export_chunks_to_dict(chunks)
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
+            
+# Add this line to the bottom of your existing chunker.py file
+# This creates an alias so your app.py can find the class it expects
+
+IndonesianLegalDocumentChunker = AdaptiveIndonesianLegalDocumentChunker

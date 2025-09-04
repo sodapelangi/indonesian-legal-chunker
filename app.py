@@ -138,8 +138,7 @@ async def process_document_async(job_id: str, text: str, options: ChunkingOption
             overlap_size=options.overlap_size
         )
         
-        
-        await update_progress(job_id, "parsing", 25.0, ""Processing document with chunker")
+        await update_progress(job_id, "processing", 25.0, "Processing document with chunker")   
         
         all_chunks = chunker.chunk_document(text)
         

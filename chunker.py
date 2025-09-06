@@ -288,7 +288,7 @@ class AdaptiveIndonesianLegalDocumentChunker:
         # Pattern to check for amendments in the preamble (used as a fallback).
         # FIXED PATTERN
         revocation_context_pattern = re.compile(r'((?:.|\n)*?)dicabut\s+dan\s+dinyatakan\s+tidak\s+berlaku', re.IGNORECASE)
-        amend_pattern = re.compile(r"(?:sebagaimana\s+telah\s+diubah\s+dengan|PERUBAHAN\s+(?:.*?)\s+ATAS)\s+((?:PERATURAN|UNDANG-UNDANG|KEPUTUSAN)[\s\S]*?)(?=\s*(?:DENGAN RAHMAT|Menimbang|Mengingat|$))", 
+        amend_pattern = re.compile(r"(PERUBAHAN\s+(?:.*?)\s+ATAS|?:sebagaimana\s+telah\s+diubah\s+dengan)\s+((?:PERATURAN|UNDANG-UNDANG|KEPUTUSAN)[\s\S]*?)(?=\s*(?:DENGAN RAHMAT|Menimbang|Mengingat|$))", 
             re.IGNORECASE | re.DOTALL)
         find_all_regs_pattern = re.compile(self.FIND_REG_PATTERN, re.IGNORECASE)
         
